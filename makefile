@@ -1,7 +1,7 @@
 
 app        = $(shell basename "${PWD}" | sed 's|docker-||g')
 branch     = $(shell git rev-parse --abbrev-ref HEAD 2> /dev/null || echo "unstable")
-build_date = $(shell date -u +%FT%T.%S%Z)
+build_date := $(shell date -u +%FT%T.%S%Z)
 commit     = $(shell git rev-parse --short HEAD 2> /dev/null || echo "unstable")
 img        = ${ns}/${app}:${tag}
 ns         = gruen

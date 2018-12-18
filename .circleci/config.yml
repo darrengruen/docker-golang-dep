@@ -1,0 +1,12 @@
+version: "2.1"
+jobs:
+  build:
+    steps:
+      - run:
+          command: echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin
+      - run:
+          command: make build
+      - run:
+          command: make test
+      - run:
+          command: make push
