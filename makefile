@@ -1,13 +1,13 @@
+# CircleCI Env vars
 CIRCLE_PROJECT_REPONAME ?= app
-CIRCLE_BRANCH           ?= branch
+CIRCLE_BRANCH           ?= "$(shell whoami)_unstable"
 
 app        = $(shell basename "${PWD}" | sed 's|docker-||g')
 branch     = $(shell git rev-parse --abbrev-ref HEAD 2> /dev/null || echo "unstable")
 build_date := $(shell date -u +%FT%T.%S%Z)
 commit     = $(shell git rev-parse --short HEAD 2> /dev/null || echo "unstable")
-img        = ${ns}/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_BRANCH}
+img        = ${ns}/${CIRCLE_PROJECT_REPONAME}:$(shell echo ${CIRCLE_BRANCH} | sed 's|\/|__|g')
 ns         = gruen
-tag        = $(shell git rev-parse --abbrev-ref HEAD 2> /dev/null || echo "unstable")
 
 build:
 	docker build \
@@ -39,17 +39,7 @@ test:
 			--image ${img} \
 			--config /test/test.yaml
 
-vars:
-	printf "%s\\n" \
-    "app: ${app}" \
-    "branch: ${branch}" \
-    "build_date: ${build_date}" \
-    "commit: ${commit}" \
-    "img: ${img}" \
-    "ns: ${ns}" \
-    "tag: ${tag}"
-
-.phony: build vars
+.phony: build clean lint push run test
 
 ifndef VERBOSE
 .SILENT:
