@@ -4,6 +4,7 @@ jobs:
     docker: 
       - image: ubuntu:18.04
     steps:
+      - setup_remote_docker
       - run: echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin
       - run: make build
       - run: make test
