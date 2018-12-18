@@ -3,7 +3,9 @@ jobs:
   build:
     machine: true
     steps:
-      - run: echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin
+      - run: 
+          context: docker build
+          command: echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin
       - run: make build
       - run: make test
       - run: make push
