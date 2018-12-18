@@ -4,8 +4,21 @@ jobs:
     machine: true
     steps:
       - run: 
-          context: docker build
+          name: Docker Login
           command: echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin
-      - run: make build
-      - run: make test
-      - run: make push
+      - checkout
+      - run: 
+          name: Build
+          command: make build
+      - run: 
+          name: Test
+          command: make test
+      - run: 
+          name: Push
+          command: make push
+workflows:
+  version: 2
+  docker-build:
+    jobs:
+      - build:
+          context: docker build
